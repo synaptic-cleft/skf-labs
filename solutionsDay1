@@ -1,15 +1,23 @@
-#How to fix the files on docker
+#How to connect to docker
 docker ps
 docker exec -it <id> /bin/sh
-Then check the contents of the python script
 
 
 #CORS
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:cors
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cors
+
+Note: Run with multiple ports exposed:
+docker run -ti -p <ip>:5000:5000 -p <ip>:1337:1337 blabla1337/owasp-skf-lab:cors
+
 ##Exploit
-TODO
+edit request, add:
+Origin:blabla.nl
+-> it gets reflected in the Access-Control-Allow-Origin header
+
+connect to docker and start the evil application:
+python3 evil_server.py
 ##Fix
 TODO
 
@@ -70,6 +78,17 @@ docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cross-site-request-for
 TODO
 ##Fix
 TODO
+
+
+#Topic
+##Preparation
+docker pull blabla1337/owasp-skf-lab:url-redirect
+docker pull blabla1337/owasp-skf-lab:url-redirect-hard
+docker pull blabla1337/owasp-skf-lab:url-redirect-harder
+docker pull blabla1337/owasp-skf-lab:url-redirect-harder2
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
+##Exploit
+##Fix
 
 #Topic
 ##Preparation
