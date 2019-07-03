@@ -1,6 +1,12 @@
 #How to connect to docker
-docker ps
-docker exec -it <id> /bin/sh
+always run your container with --name myContainer
+So you can easily connect by:
+docker exec -it myContainer /bin/sh
+instead of getting the run-time specific container ID first
+
+#For simplicity, change /etc/hosts
+Map your local IP to some name in /etc/hosts
+<ip> asdf
 
 
 #CORS
@@ -32,7 +38,10 @@ document.getElementById("cors").innerHTML= req.responseText;
 }
 </script>```
 ##Fix
-TODO
+replace:
+    cors = CORS(app, resources={r"/*": {"origins": "*"}})^M
+with:
+    cors = CORS(app, resources={r"/*": {"origins": "asdf"}})^M
 
 
 #XSS
