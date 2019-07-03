@@ -147,8 +147,19 @@ whitelist specific redirects that are allowed
 #IDOR
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:idor
-docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:
+docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:idor
 ##Exploit
-TODO
+enumerate create a pdf and check result with id
+try out random ids
+then intercept this POST /download and send it to intruder
+mark the id clear and add button
+Payload type numbers and choose range
+(( OR: then go to payloads and add a list to "Payload Options [Simple list]"/load
+for i in {1..1000} ; do echo $i >> a.txt ; done ;
+))
+run under "Positions"/"Start attack" and check for varying response content length.
+We can see that the response length for payload 20 is different
+so go back to the website and download the pdf for id=20
 ##Fix
-TODO
+A real fix would be checking for authorization but there is not even authentication in place, so this would be quite some work.
+The "quick-fix" in the challenge is commenting out the generation of the pdf and removing it from the server. Then it's not accessible anymore.
