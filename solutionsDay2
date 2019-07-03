@@ -179,4 +179,13 @@ https://github.com/frohoff/ysoserial
 
 DES-Yaml
 ##Exploit
+TODO
 ##Fix
+TODO
+
+
+#LFI/RFI
+##Exploit
+In payload use text/../../../../../../../../etc/passwd
+##Fix
+whitelist
