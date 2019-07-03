@@ -172,3 +172,11 @@ https://github.com/tijme/angularjs-csti-scanner/blob/master/acstis/Payloads.py
 TODO: how do you know that autoescape also escapes {{ and other angularJS risky characters?
 
 
+#Insecure Deserialization
+How to recognize it on the wire? Binary format is AC ED 00 05 (05 being the protocol version number)
+most exploited one is using commands from Java Apache Common Collection as it's in the classpath most of the time
+https://github.com/frohoff/ysoserial
+
+DES-Yaml
+##Exploit
+##Fix
