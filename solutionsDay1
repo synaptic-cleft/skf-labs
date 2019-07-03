@@ -92,6 +92,7 @@ use comment
 or automated:
 python3 sqlmap.py --all --url http://<ip>:50000/home/admin
 ##Fix
+cd models
 ```
 #cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId='+pageId)
 cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId=?',pageId)
