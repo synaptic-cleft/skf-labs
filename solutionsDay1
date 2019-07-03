@@ -115,6 +115,12 @@ and in the application check for the value:
         return render_template('index.html')```
 Very hacky example of course, this should not be one fixed value.
 
+For the flask framework, see https://flask-wtf.readthedocs.io/en/stable/csrf.html
+```
+from flask_wtf.csrf import CSRFProtect
+csrf = CSRFProtect(app)
+```
+
 
 #Open redirect
 ##Preparation
@@ -128,8 +134,10 @@ docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
 ##Fix
 TODO
 ```def redirector():
+    whitelist = ["home", "dashboard"]
     landing_page = request.args.get('newurl')
-    return redirect(landing_page, 302)```
+    if landing_page in whitelist:
+        return redirect("http://www.localhost:5000/" + landing_page, 302)```
 whitelist specific redirects that are allowed
 
 
