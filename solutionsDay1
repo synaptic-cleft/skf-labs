@@ -92,8 +92,10 @@ use comment
 or automated:
 python3 sqlmap.py --all --url http://<ip>:50000/home/admin
 ##Fix
-TODO
-
+```
+#cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId='+pageId)
+cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId=?',pageId)
+```
 
 #Cross-site-request-forgery
 ##Preparation
@@ -135,7 +137,6 @@ docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
 ##Exploit
 <ip>:5000/redirect?newurl=www.malicioussite.nl
 ##Fix
-TODO
 ```def redirector():
     whitelist = ["home", "dashboard"]
     landing_page = request.args.get('newurl')
