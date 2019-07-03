@@ -46,7 +46,7 @@ http://localhost:5000/{{1=1}}
 and other real exploits from:
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2
 ##Fix
-Move template to its own file.
+Move template to its own file. in /templates directory
 ```
 <!DOCTYPE html>                                                                                                                                                      
 <html>                                                                                                                                                                 
