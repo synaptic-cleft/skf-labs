@@ -47,7 +47,7 @@ Interesting blog post:
 https://hackernoon.com/can-timing-attack-be-a-practical-security-threat-on-jwt-signature-ba3c8340dea9
 
 ## Exploit
-After authentication you receive a JWT where you can swith the algorithm in the header to "None"
+After authentication you receive a JWT where you can swith the algorithm in the header to "None":  
 {
   "typ":"JWT",
   "alg":"NONE"
@@ -57,4 +57,16 @@ After authentication you receive a JWT where you can swith the algorithm in the 
 ewogICJ0eXAiOiJKV1QiLAogICJhbGciOiJOT05FIgp9.eyJleHAiOjE1NTMwMDM3MTgsImlhdCI6MTU1MzAwMzQxOCwibmJmIjoxNTUzMDAzNDE4LCJpZGVudGl0eSI6Mn0.  
 Open the local storage tab within the browser and replace the original token there.
 
+You can check JWT at https://jwt.io/
 
+## Fix
+Do not allow algorithm "NONE" in the backend.
+
+# JWT secret
+## Exploit
+Intercept and check JWT from response. After decoding, we can brute-force with:
+https://github.com/jmaxxz/jwtbrute
+
+## Fix
+Use a better secret in:
+```app.config['SECRET_KEY'] = 'secret'```
