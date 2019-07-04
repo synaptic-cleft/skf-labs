@@ -32,6 +32,6 @@ will crash the system
 replace:  
 ```    match = re.search(r"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@{1}([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$", str(email))```  
 with:  
-```    match = re.search(r"^[0-9a-zA-Z-.\w]{1,10}@{1}[0-9a-zA-Z]{1,10}\.[a-zA-Z]{2,9}$", str(email))``` . 
+```    match = re.search(r"^([0-9a-zA-Z-.\w])+@{1}([0-9a-zA-Z-\w]+\.)+[a-zA-Z]{2,9}$", str(email))``` . 
 
 So this is not according to the RFC but fixes the issue in the application.
