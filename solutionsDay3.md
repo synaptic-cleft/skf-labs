@@ -21,3 +21,17 @@ to:
         os.system('convert static/img/bones.png -resize '+sizeImg+'% static/img/bones.png')
 ```  
 alternative in php template: escapeshellarg() or escapeshellcmd() in PHP . 
+
+
+# DoS regex
+## Exploit
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa . 
+will crash the system
+
+## Fix
+replace:  
+```    match = re.search(r"^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@{1}([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$", str(email))```  
+with:  
+```    match = re.search(r"^[0-9a-zA-Z-.\w]{1,10}@{1}[0-9a-zA-Z]{1,10}\.[a-zA-Z]{2,9}$", str(email))``` . 
+
+So this is not according to the RFC but fixes the issue in the application.
