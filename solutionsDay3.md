@@ -34,4 +34,12 @@ replace:
 with:  
 ```    match = re.search(r"^([0-9a-zA-Z-.\w])+@{1}([0-9a-zA-Z-\w]+\.)+[a-zA-Z]{2,9}$", str(email))``` . 
 
-So this is not according to the RFC but fixes the issue in the application.
+So this is not according to the RFC but fixes the issue in the application.  
+
+https://www.owasp.org/index.php/Regular_expression_Denial_of_Service_-_ReDoS . 
+
+
+# JWT
+Make sure you have all imports installed if you run the python code locally:  
+pip3 install -r requirements.txt . 
+
