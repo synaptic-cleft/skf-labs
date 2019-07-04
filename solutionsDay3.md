@@ -1,9 +1,9 @@
-#CMD
-##Exploit
+# CMD
+## Exploit
 ```50;touch AAAAAAA;```
 really makes the file, so execution is possible
 
-##Fix
+## Fix
 change:
 ```    os.system('convert static/img/bones.png -resize '+sizeImg+'% static/img/bones.png')```
 to:
