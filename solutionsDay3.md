@@ -51,7 +51,8 @@ After authentication you receive a JWT where you can swith the algorithm in the 
 ```{
   "typ":"JWT",
   "alg":"NONE"
-}``` . 
+}
+``` . 
 -> ewogICJ0eXAiOiJKV1QiLAogICJhbGciOiJOT05FIgp9 . 
 ewogICJ0eXAiOiJKV1QiLAogICJhbGciOiJOT05FIgp9.eyJleHAiOjE1NTMwMDM3MTgsImlhdCI6MTU1MzAwMzQxOCwibmJmIjoxNTUzMDAzNDE4LCJpZGVudGl0eSI6Mn0.  
 Open the local storage tab within the browser and replace the original token there.
